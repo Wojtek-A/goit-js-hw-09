@@ -1,3 +1,5 @@
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
+
 const firstDelayInput = document.querySelector('input[name="delay"]');
 const delayStepInput = document.querySelector('input[name="step"]');
 const amountInput = document.querySelector('input[name="amount"]');
@@ -16,26 +18,29 @@ function createPromise(position, delay) {
   });
 }
 
-createPromise(1, 1500)
-  .then(({ position, delay }) => {
-    console.log(`✅ Fulfilled promise ${position} in ${delay}ms`);
-  })
-  .catch(({ position, delay }) => {
-    console.log(`❌ Rejected promise ${position} in ${delay}ms`);
-  });
+const promisesHandler = event => {
+  event.preventDefault();
 
-  createPromise(2, 2500)
-  .then(({ position, delay }) => {
-    console.log(`✅ Fulfilled promise ${position} in ${delay}ms`);
-  })
-  .catch(({ position, delay }) => {
-    console.log(`❌ Rejected promise ${position} in ${delay}ms`);
-  });
+  let delay = firstDelayInput.valueAsNumber;
+  const delayStepValue = delayStepInput.valueAsNumber;
+  const amountValue = amountInput.valueAsNumber;
 
-  createPromise(3, 1500)
-  .then(({ position, delay }) => {
-    console.log(`✅ Fulfilled promise ${position} in ${delay}ms`);
-  })
-  .catch(({ position, delay }) => {
-    console.log(`❌ Rejected promise ${position} in ${delay}ms`);
-  });
+  for (let i = 1; i <= amountValue; i++) {
+    createPromise(i, delay)
+      .then(({ position, delay }) => {
+        // console.log(`✅ Fulfilled promise ${i} in ${delay}ms `);
+        Notify.success(`✅ Fulfilled promise ${i} in ${delay}ms `, {
+          useIcon: false,
+        });
+      })
+      .catch(({ position, delay }) => {
+        // console.log(`❌ Rejected promise ${i} in ${delay}ms`);
+        Notify.failure(`❌ Rejected promise ${i} in ${delay}ms`, {
+          useIcon: false,
+        });
+      });
+    delay += delayStepValue;
+  }
+};
+
+button.addEventListener('click', promisesHandler);
