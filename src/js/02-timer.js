@@ -30,8 +30,15 @@ button.addEventListener('click', () => {
 
   const dateIntreval = setInterval(() => {
     const todayDate = new Date();
+    let ms = 0;
 
-    let ms = Math.abs(date - todayDate);
+    function checkCorrectDate() {
+      if (date > todayDate) {
+        return (ms = Math.abs(date - todayDate));
+      } else ms = 0;
+      Notify.failure('Please choose a date in the future');
+    }
+    checkCorrectDate();
 
     const second = 1000;
     const minute = second * 60;
