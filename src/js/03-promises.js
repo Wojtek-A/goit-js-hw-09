@@ -41,6 +41,10 @@ const promisesHandler = event => {
       });
     delay += delayStepValue;
   }
+  button.disabled = true;
+  setTimeout(function () {
+    button.disabled = false;
+  }, delay);
 };
 
 button.addEventListener('click', promisesHandler);
